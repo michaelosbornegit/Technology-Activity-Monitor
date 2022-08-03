@@ -1,0 +1,31 @@
+{
+  "name": "technology-activity-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "nodemon src/index.ts",
+    "migrate:make": "knex --client pg migrate:make",
+    "tsoa": "tsoa spec-and-routes",
+    "migrate": "knex migrate:latest"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/body-parser": "^1.19.2",
+    "@types/express": "^4.17.13",
+    "@types/node": "^18.6.3",
+    "nodemon": "^2.0.19",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@types/pg": "^8.6.5",
+    "body-parser": "^1.20.0",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "knex": "^2.2.0",
+    "pg": "^8.7.3",
+    "tsoa": "^4.1.1"
+  }
+}

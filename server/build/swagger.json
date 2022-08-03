@@ -1,0 +1,141 @@
+{
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"HostMachines": {
+				"type": "string",
+				"enum": [
+					"WINDOWS",
+					"MAC",
+					"ANDROID"
+				]
+			},
+			"CreateSession": {
+				"properties": {
+					"openTimeSeconds": {
+						"type": "number",
+						"format": "double"
+					},
+					"endCollectionDate": {
+						"type": "string"
+					},
+					"startCollectionDate": {
+						"type": "string"
+					},
+					"application": {
+						"type": "string"
+					},
+					"hostMachine": {
+						"$ref": "#/components/schemas/HostMachines"
+					}
+				},
+				"required": [
+					"openTimeSeconds",
+					"endCollectionDate",
+					"startCollectionDate",
+					"application",
+					"hostMachine"
+				],
+				"type": "object"
+			},
+			"Session": {
+				"allOf": [
+					{
+						"$ref": "#/components/schemas/CreateSession"
+					},
+					{
+						"properties": {
+							"id": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"id"
+						],
+						"type": "object"
+					}
+				]
+			},
+			"SessionBody": {
+				"properties": {
+					"sessions": {
+						"items": {
+							"$ref": "#/components/schemas/CreateSession"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"sessions"
+				],
+				"type": "object"
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "technology-activity-monitor",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"openapi": "3.0.0",
+	"paths": {
+		"/session/all": {
+			"get": {
+				"operationId": "GetSessions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/Session"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/session": {
+			"post": {
+				"operationId": "PostSessions",
+				"responses": {
+					"201": {
+						"description": "Session Created"
+					}
+				},
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/SessionBody"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
