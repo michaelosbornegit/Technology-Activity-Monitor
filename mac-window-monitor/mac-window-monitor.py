@@ -30,9 +30,6 @@ def on_move(x, y):
     global pressed
     pressed = True
 
-
-
-
 def getActiveWindowInfo():
     if sys.platform == "darwin":
         all_apps = NSWorkspace.sharedWorkspace().runningApplications()
@@ -82,7 +79,7 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
         if counter >= 120:
             sessions = []
             for window in activeWindows:
-                if activeWindows[window]:
+                if activeWindows[window] and window:
                     sessions.append({
                         'hostMachine': 'MAC',
                         'application': window,

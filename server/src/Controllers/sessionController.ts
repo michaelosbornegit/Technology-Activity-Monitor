@@ -25,8 +25,6 @@ import bodyParser from "body-parser";
     @Post()
     @SuccessResponse('201', 'Session Created')
     public async postSessions(@Body() body: SessionBody): Promise<void> {
-      console.log(body);
-      
       await new SessionService().create(body.sessions);
     }
 }
