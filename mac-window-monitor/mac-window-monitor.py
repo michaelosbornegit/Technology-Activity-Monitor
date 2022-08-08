@@ -92,7 +92,7 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
                 r = requests.post('http://localhost:8100/session/desktop', json={'sessions': sessions})
             except requests.exceptions.RequestException as e:
                 print(e)
-            startDate = datetime.datetime.now().isoformat()
+            startDate = datetime.datetime.utcnow().isoformat()
             activeWindows.clear()
             counter = 0
         pressed = False
