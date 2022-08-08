@@ -60,7 +60,7 @@ def getActiveWindowInfo():
 counter = 0
 activityCounter = 0
 activeWindows = {}
-startDate = datetime.datetime.now().isoformat()
+startDate = datetime.datetime.utcnow().isoformat()
 
 # Collect events until released
 with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mouse.Listener(on_scroll=on_scroll, on_move=on_move) as mouseListener:
@@ -84,12 +84,12 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
                         'hostMachine': 'MAC',
                         'application': window,
                         'startCollectionDate': startDate,
-                        'endCollectionDate': datetime.datetime.now().isoformat(),
+                        'endCollectionDate': datetime.datetime.utcnow().isoformat(),
                         'openTimeSeconds': activeWindows[window]
                 })
             print({'sessions': sessions})
             try:
-                r = requests.post('http://localhost:8100/session', json={'sessions': sessions})
+                r = requests.post('http://localhost:8100/session/desktop', json={'sessions': sessions})
             except requests.exceptions.RequestException as e:
                 print(e)
             startDate = datetime.datetime.now().isoformat()
