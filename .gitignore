@@ -5,3 +5,6 @@
 **/.env
 **/dist
 **/latestBuild.zip
+**/cache
+
+server/src/oapi

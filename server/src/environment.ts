@@ -6,7 +6,7 @@ let dotenvPath = path.resolve(process.cwd(), '.env');
 dotenv.config({ path: dotenvPath });
 
 const {
-    PORT = '8100',
+    PORT = '5501',
     PG_CONNECTION_STRING = ''
 } = process.env;
 

@@ -3,12 +3,29 @@ import express, {
   Request as ExRequest,
   NextFunction,
 } from "express";
+import cors from 'cors';
 import { ValidateError } from "tsoa";
 import { createServer } from "http";
-import { RegisterRoutes } from "../build/routes";
+import { RegisterRoutes } from "./oapi/routes";
+import env from "./environment";
 
 const app = express();
 const server = createServer(app);
+
+const allowedHosts = [env.APP_HOST, env.API_HOST];
+console.log(allowedHosts);
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin || allowedHosts.indexOf(origin) !== -1 || origin.includes('localhost')) {
+        cb(null, true);
+      } else {
+        cb(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+  })
+);
 
 app.get("/", (req, res) => {
   res.send("hello, world!");
@@ -30,6 +47,7 @@ app.use(function errorHandler(
     });
   }
   if (err instanceof Error) {
+    console.log(err.stack);
     return res.status(500).json({
       message: "Internal Server Error",
     });
