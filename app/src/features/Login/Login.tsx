@@ -26,7 +26,7 @@ const Login = (): JSX.Element => {
         <LoginSection>
           <Typography variant="h2">Log in</Typography>
           <TextField label='Code'></TextField>
-          <Button href="/mint">Login</Button>
+          <Button href="/home">Login</Button>
         </LoginSection>
       </LoginPage>
     </>

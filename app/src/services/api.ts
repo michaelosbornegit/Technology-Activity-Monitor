@@ -1,5 +1,3 @@
-import { CreateBasicToken } from "@serverTypes/basic-token";
-
 const basicTokenResource = `${process.env.REACT_APP_API_HOST}/basicToken/mint` || '';
 
 const enrichedFetch = async (
@@ -17,13 +15,3 @@ const enrichedFetch = async (
     return response.json();
 }
 
-export const mintNft = async (nft: CreateBasicToken) => {
-    const response = await enrichedFetch(basicTokenResource,
-        {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(nft),
-          });
-
-    console.log(response);
-}
