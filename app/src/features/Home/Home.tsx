@@ -5,9 +5,9 @@ const Home = (): JSX.Element => {
 
   return (
     <>
-    <Paper sx={{padding: '50px'}}>
-      <Typography variant="h1">Hello, world!</Typography>
-    </Paper>
+      <Paper sx={{ padding: '50px' }}>
+        <Typography variant="h1">Hello, world!</Typography>
+      </Paper>
     </>
   )
 }
