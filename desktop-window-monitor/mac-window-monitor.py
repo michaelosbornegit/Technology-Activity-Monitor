@@ -1,8 +1,12 @@
+import os
 import sys
 import time
 import requests
 import pynput
 import datetime
+from dotenv import load_dotenv
+
+load_dotenv()
 
 if sys.platform == "darwin":
     from AppKit import NSWorkspace
@@ -88,8 +92,12 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
                         'openTimeSeconds': activeWindows[window]
                 })
             print({'sessions': sessions})
+            apiHost = os.getenv('API_HOST')
+            apiPort = os.getenv('API_PORT')
+            if not apiHost or not apiPort:
+                raise Exception("env file not valid or not provided")
             try:
-                r = requests.post('http://localhost:8100/session/desktop', json={'sessions': sessions})
+                r = requests.post(f'{apiHost}:{apiPort}/session/desktop', json={'sessions': sessions})
             except requests.exceptions.RequestException as e:
                 print(e)
             startDate = datetime.datetime.utcnow().isoformat()

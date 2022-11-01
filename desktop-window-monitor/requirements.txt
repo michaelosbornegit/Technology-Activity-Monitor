@@ -1,6 +1,9 @@
 certifi==2022.6.15
 charset-normalizer==2.1.0
+docopt==0.6.2
 idna==3.3
+pipreqs==0.4.11
+pynput==1.7.6
 pyobjc==8.5
 pyobjc-core==8.5
 pyobjc-framework-Accessibility==8.5
@@ -45,6 +48,7 @@ pyobjc-framework-CoreSpotlight==8.5
 pyobjc-framework-CoreText==8.5
 pyobjc-framework-CoreWLAN==8.5
 pyobjc-framework-CryptoTokenKit==8.5
+pyobjc-framework-DataDetection==8.5
 pyobjc-framework-DeviceCheck==8.5
 pyobjc-framework-DictionaryServices==8.5
 pyobjc-framework-DiscRecording==8.5
@@ -69,6 +73,7 @@ pyobjc-framework-InputMethodKit==8.5
 pyobjc-framework-InstallerPlugins==8.5
 pyobjc-framework-InstantMessage==8.5
 pyobjc-framework-Intents==8.5
+pyobjc-framework-IntentsUI==8.5
 pyobjc-framework-IOSurface==8.5
 pyobjc-framework-iTunesLibrary==8.5
 pyobjc-framework-KernelManagement==8.5
@@ -77,6 +82,8 @@ pyobjc-framework-LaunchServices==8.5
 pyobjc-framework-libdispatch==8.5
 pyobjc-framework-LinkPresentation==8.5
 pyobjc-framework-LocalAuthentication==8.5
+pyobjc-framework-LocalAuthenticationEmbeddedUI==8.5
+pyobjc-framework-MailKit==8.5
 pyobjc-framework-MapKit==8.5
 pyobjc-framework-MediaAccessibility==8.5
 pyobjc-framework-MediaLibrary==8.5
@@ -86,6 +93,7 @@ pyobjc-framework-Metal==8.5
 pyobjc-framework-MetalKit==8.5
 pyobjc-framework-MetalPerformanceShaders==8.5
 pyobjc-framework-MetalPerformanceShadersGraph==8.5
+pyobjc-framework-MetricKit==8.5
 pyobjc-framework-MLCompute==8.5
 pyobjc-framework-ModelIO==8.5
 pyobjc-framework-MultipeerConnectivity==8.5
@@ -108,6 +116,7 @@ pyobjc-framework-QuickLookThumbnailing==8.5
 pyobjc-framework-ReplayKit==8.5
 pyobjc-framework-SafariServices==8.5
 pyobjc-framework-SceneKit==8.5
+pyobjc-framework-ScreenCaptureKit==8.5
 pyobjc-framework-ScreenSaver==8.5
 pyobjc-framework-ScreenTime==8.5
 pyobjc-framework-ScriptingBridge==8.5
@@ -116,6 +125,7 @@ pyobjc-framework-Security==8.5
 pyobjc-framework-SecurityFoundation==8.5
 pyobjc-framework-SecurityInterface==8.5
 pyobjc-framework-ServiceManagement==8.5
+pyobjc-framework-ShazamKit==8.5
 pyobjc-framework-Social==8.5
 pyobjc-framework-SoundAnalysis==8.5
 pyobjc-framework-Speech==8.5
@@ -132,5 +142,8 @@ pyobjc-framework-VideoToolbox==8.5
 pyobjc-framework-Virtualization==8.5
 pyobjc-framework-Vision==8.5
 pyobjc-framework-WebKit==8.5
+python-dotenv==0.21.0
 requests==2.28.1
+six==1.16.0
 urllib3==1.26.11
+yarg==0.1.9

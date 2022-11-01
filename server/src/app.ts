@@ -13,7 +13,6 @@ const app = express();
 const server = createServer(app);
 
 const allowedHosts = [env.APP_HOST, env.API_HOST];
-console.log(allowedHosts);
 
 app.use(
   cors({
