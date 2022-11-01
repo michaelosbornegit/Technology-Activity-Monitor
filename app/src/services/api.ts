@@ -1,4 +1,4 @@
-import { DisplaySession, Session } from '@serverTypes/session';
+import { DisplaySession } from '@serverTypes/session';
 
 const sessionResource = `${process.env.REACT_APP_API_HOST}/session` || '';
 

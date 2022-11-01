@@ -1,4 +1,3 @@
-import { Paper, Typography } from "@mui/material"
 import type { DisplaySession } from "@serverTypes/session";
 import React, { useEffect, useState } from "react";
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
