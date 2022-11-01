@@ -32,5 +32,5 @@ export type ChromeSessionBody = {
 
 export type DisplaySession = {
     applicationNames: string[];
-    applicationTimeAndEndDate: { [id: string]: string; }[];
+    applicationTimeAndEndDate: { [id: string]: string | number; }[];
 }

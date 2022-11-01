@@ -34,17 +34,17 @@ export const pastDaySessions = async () => {
     }
     
     const currentEndDate = dayjs.utc(results[i].endCollectionDate).toISOString();
-    const newDisplaySession: { [id: string]: string } = {};
+    const newDisplaySession: { [id: string]: string | number } = {};
 
     newDisplaySession['endCollectionDate'] = results[i].endCollectionDate;
-    newDisplaySession[results[i].application] = results[i].openTimeSeconds.toString();
+    newDisplaySession[results[i].application] = results[i].openTimeSeconds;
     
     while (i < results.length - 1 && currentEndDate == dayjs.utc(results[i + 1].endCollectionDate).toISOString()) {
       i++;
       if (displaySession.applicationNames.findIndex((session) => session === results[i].application) === -1) {
         displaySession.applicationNames.push(results[i].application);
       }
-      newDisplaySession[results[i].application] = results[i].openTimeSeconds.toString();
+      newDisplaySession[results[i].application] = results[i].openTimeSeconds;
     }
 
     displaySession.applicationTimeAndEndDate.push(newDisplaySession);
