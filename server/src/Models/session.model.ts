@@ -20,7 +20,7 @@ export const allSessions = async () => {
 };
 
 export const pastDaySessions = async () => {
-  const results = await pg<Session>(SESSION_TABLE).select().where('endCollectionDate', '>=', dayjs.utc().subtract(1, 'day').toISOString()).where('endCollectionDate', '<', dayjs.utc().toISOString()).orderBy('endCollectionDate', 'asc');
+  const results = await pg<Session>(SESSION_TABLE).select().where('endCollectionDate', '>=', dayjs.utc().subtract(12, 'hours').toISOString()).where('endCollectionDate', '<', dayjs.utc().toISOString()).orderBy('endCollectionDate', 'asc');
 
   const displaySession: DisplaySession = {
     applicationNames: [],
