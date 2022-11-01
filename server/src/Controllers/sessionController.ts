@@ -10,21 +10,28 @@ import {
     Route,
     SuccessResponse,
   } from "tsoa";
-  import { ChromeSessionBody, Session, SessionBody } from "../Types/session";
+  import type { ChromeSessionBody, DisplaySession, Session, SessionBody } from "../Types/session";
   import { SessionService } from "../Services/session";
 import bodyParser from "body-parser";
   
   @Route("session")
   @Middlewares(bodyParser.urlencoded({ extended: true }), bodyParser.json())
   export class SessionController extends Controller {
-    @Get("all")
+    @Get("/all")
     public async getSessions(): Promise<Session[]> {
       return await new SessionService().getAll();
+    }
+
+    @Get("/lastDay")
+    public async getPastDay(): Promise<DisplaySession> {
+      return await new SessionService().getPastDaySessions();
     }
 
     @Post("/desktop")
     @SuccessResponse('201', 'Session Created')
     public async postSessions(@Body() body: SessionBody) {
+      console.log(body);
+      
       await new SessionService().create(body.sessions);
     }
 

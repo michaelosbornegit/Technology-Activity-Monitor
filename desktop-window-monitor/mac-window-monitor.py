@@ -68,8 +68,6 @@ startDate = datetime.datetime.utcnow().isoformat()
 
 # Collect events until released
 with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mouse.Listener(on_scroll=on_scroll, on_move=on_move) as mouseListener:
-    # keyboardListener.join()
-    # mouseListener.join()
     while(1):
         counter += 1
         activityCounter += 1
@@ -79,26 +77,24 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
         currentWindowValue = activeWindows.setdefault(currentActiveWindow, 0)
         if activityCounter <= 10:
             activeWindows[currentActiveWindow] += 1
-
-        if counter >= 5:
+        if counter >= 120:
             sessions = []
+            endCollectionDate = datetime.datetime.utcnow().isoformat()
             for window in activeWindows:
                 if activeWindows[window] and window:
                     sessions.append({
                         'hostMachine': 'MAC',
                         'application': window,
                         'startCollectionDate': startDate,
-                        'endCollectionDate': datetime.datetime.utcnow().isoformat(),
+                        'endCollectionDate': endCollectionDate, 
                         'openTimeSeconds': activeWindows[window]
                 })
             print({'sessions': sessions})
             apiHost = os.getenv('API_HOST')
-            apiPort = os.getenv('API_PORT')
-            print(f'{apiHost}:{apiPort}')
-            if not apiHost or not apiPort:
+            if not apiHost:
                 raise Exception("env file not valid or not provided")
             try:
-                r = requests.post(f'{apiHost}:{apiPort}/session/desktop', json={'sessions': sessions})
+                r = requests.post(f'{apiHost}/session/desktop', json={'sessions': sessions})
             except requests.exceptions.RequestException as e:
                 print(e)
             startDate = datetime.datetime.utcnow().isoformat()

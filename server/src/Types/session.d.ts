@@ -1,32 +1,36 @@
 import { HostMachines } from "./enums";
 
 export type CreateSession = {
-  hostMachine: HostMachines;
-  application: string;
-  // TODO, you could move these up to Session to make the request smaller
-  startCollectionDate: string;
-  endCollectionDate: string;
-  openTimeSeconds: number;
+    hostMachine: HostMachines;
+    startCollectionDate: string;
+    endCollectionDate: string;
+    application: string;
+    openTimeSeconds: number;
 }
 
 export type Session = CreateSession & {
-  id: number;
+    id: number;
 };
 
 export type CreateChromeSession = {
-  url: string;
-  navigationDate: string;
+    url: string;
+    navigationDate: string;
 }
 
 export type ChromeSession = CreateChromeSession & {
-  id: number;
+    id: number;
 }
 
 export type SessionBody = {
-  sessions: CreateSession[];
+    sessions: CreateSession[];
 }
 
 export type ChromeSessionBody = {
-  url: string;
-  navigationDate: string;
+    url: string;
+    navigationDate: string;
+}
+
+export type DisplaySession = {
+    applicationNames: string[];
+    applicationTimeAndEndDate: { [id: string]: string; }[];
 }

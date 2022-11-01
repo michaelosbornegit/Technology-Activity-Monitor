@@ -1,8 +1,10 @@
-const basicTokenResource = `${process.env.REACT_APP_API_HOST}/basicToken/mint` || '';
+import { DisplaySession, Session } from '@serverTypes/session';
+
+const sessionResource = `${process.env.REACT_APP_API_HOST}/session` || '';
 
 const enrichedFetch = async (
     url: string,
-    options: {},
+    options = {} as RequestInit,
     throwOnError = true
 ) => {
     const response = await fetch(url, options);
@@ -15,3 +17,6 @@ const enrichedFetch = async (
     return response.json();
 }
 
+export const getPastDaySessions = (): Promise<DisplaySession> => {
+    return enrichedFetch(`${sessionResource}/lastDay`);
+}

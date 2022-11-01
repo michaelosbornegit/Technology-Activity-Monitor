@@ -10,8 +10,8 @@ export default function App() {
       <BrowserRouter>
         <Box sx={{ minHeight: '50px' }} />
         <Routes>
-          <Route path='login' element={<Login />} />
-          <Route path='/' element={<Home />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/home' element={<Home />} />
 
           <Route path='*' element={<Login />} />
         </Routes>
