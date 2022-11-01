@@ -12,7 +12,6 @@ const environment_1 = __importDefault(require("./environment"));
 const app = (0, express_1.default)();
 const server = (0, http_1.createServer)(app);
 const allowedHosts = [environment_1.default.APP_HOST, environment_1.default.API_HOST];
-console.log(allowedHosts);
 app.use((0, cors_1.default)({
     origin: (origin, cb) => {
         if (!origin || allowedHosts.indexOf(origin) !== -1 || origin.includes('localhost')) {
