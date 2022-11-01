@@ -80,7 +80,7 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
         if activityCounter <= 10:
             activeWindows[currentActiveWindow] += 1
 
-        if counter >= 120:
+        if counter >= 5:
             sessions = []
             for window in activeWindows:
                 if activeWindows[window] and window:
@@ -94,6 +94,7 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
             print({'sessions': sessions})
             apiHost = os.getenv('API_HOST')
             apiPort = os.getenv('API_PORT')
+            print(f'{apiHost}:{apiPort}')
             if not apiHost or not apiPort:
                 raise Exception("env file not valid or not provided")
             try:
