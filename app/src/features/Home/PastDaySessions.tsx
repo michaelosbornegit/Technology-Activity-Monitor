@@ -32,7 +32,7 @@ const PastDaySessions = (): JSX.Element => {
                         <Legend />
 
                         {session.applicationNames.map((application) => {
-                            const randomColor = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+                            const randomColor = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
                             return (<Line key={application} type="monotone" dataKey={application} stroke={randomColor} />)
                         }
                         )
