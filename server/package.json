@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "pm2-runtime start ecosystem.config.js",
     "start:dev": "nodemon src/index.ts",
-    "migrate:make": "knex --client pg migrate:make",
+    "build": "tsoa spec-and-routes && tsc -p tsconfig.json",
     "tsoa": "tsoa spec-and-routes",
-    "migrate": "knex migrate:latest"
+    "migrate": "knex migrate:latest",
+    "migrate:make": "knex --client pg migrate:make"
   },
   "author": "",
   "license": "ISC",
