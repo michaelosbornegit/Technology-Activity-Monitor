@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
       {
-        name: 'nftwl',
+        name: 'tam',
         script: './build/index.js'
       },
     ],
