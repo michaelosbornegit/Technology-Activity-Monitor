@@ -6,7 +6,7 @@ import Home from './features/Home/Home';
 
 export default function App() {
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth='lg'>
       <BrowserRouter>
         <Box sx={{ minHeight: '50px' }} />
         <Routes>

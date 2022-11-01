@@ -7,9 +7,9 @@ const Home = (): JSX.Element => {
   return (
     <>
       <Paper sx={{ padding: '50px' }}>
-        <Typography variant="h4">Past 24 hours Activity:</Typography>
-        <div style={{height: '500px'}}>
-        <PastDaySessions />
+        <Typography variant="h4" sx={{ marginBottom: '20px' }}>Past 24 hours Activity:</Typography>
+        <div style={{ height: '500px' }}>
+          <PastDaySessions />
 
         </div>
       </Paper>
