@@ -53,18 +53,34 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
         }
     }, [committedSliderValue, hostMachine, session]);
 
+    // useEffect(() => {
+    //     if (session) {
+    //         getPastDaySessions(hostMachine, committedSliderValue[0] * -1, committedSliderValue[1] * -1).then((session) => {
+    //             setSession(session);
+    //             console.log(session);
+    //         });
+    //     }
+    // }, [committedSliderValue, hostMachine, session]);
+
     useEffect(() => {
-        if (session) {
+        if ((session?.applicationNames.length ?? 0) > Object.keys(lineColors).length) {
             const tempLineColors: { [id: string]: string } = {};
-            session.applicationNames.forEach((name) => {
-                tempLineColors[name] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            session?.applicationNames.forEach((name) => {
+                if (!(name in Object.keys(lineColors))) {
+                    tempLineColors[name] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+                }
             });
-            setLineColors(tempLineColors);
+            setLineColors({ ...lineColors, ...tempLineColors});
         }
-    }, [session])
+    }, [lineColors, session])
 
     const handleChangeCommitted = (event: Event | SyntheticEvent<Element, Event>, newValue: number | number[]) => {
-        setCommittedSliderValue(newValue as number[]);
+        const newSliderArray = newValue as number[];
+        setCommittedSliderValue(newSliderArray);
+        getPastDaySessions(hostMachine, newSliderArray[0] * -1, newSliderArray[1] * -1).then((session) => {
+            setSession(session);
+            console.log(session);
+        });
     };
 
     const handleChange = (event: Event, newValue: number | number[]) => {
