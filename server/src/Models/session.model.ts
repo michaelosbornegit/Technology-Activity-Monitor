@@ -30,14 +30,14 @@ export const pastDaySessions = async (hostMachine: HostMachines, startTime: numb
       displaySession.applicationNames.push(results[i].application);
     }
     
-    const currentEndDate = dayjs.utc(results[i].endCollectionDate).toISOString();
+    const currentEndDate = dayjs.utc(results[i].endCollectionDate).unix();
     const usageInfo: { [id: string]: string | number } = {};
-    usageInfo['endCollectionDate'] = dayjs.utc(results[i].endCollectionDate).toISOString();
+    usageInfo['endCollectionDate'] = dayjs.utc(results[i].endCollectionDate).unix();
 
     let totalTime = 0;
     usageInfo[results[i].application] = results[i].openTimeSeconds;
     totalTime += results[i].openTimeSeconds;
-    while (i < results.length - 1 && currentEndDate == dayjs.utc(results[i + 1].endCollectionDate).toISOString()) {
+    while (i < results.length - 1 && currentEndDate == dayjs.utc(results[i + 1].endCollectionDate).unix()) {
       i++;
       if (displaySession.applicationNames.findIndex((session) => session === results[i].application) === -1) {
         displaySession.applicationNames.push(results[i].application);

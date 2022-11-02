@@ -47,6 +47,7 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
     useEffect(() => {
         getPastDaySessions(hostMachine, committedSliderValue[0] * -1, committedSliderValue[1] * -1).then((session) => {
             setSession(session);
+            console.log(session);
         });
     }, [committedSliderValue, hostMachine]);
 
@@ -100,10 +101,14 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 dataKey='endCollectionDate'
-                                tickFormatter={(utc) => dayjs.utc(utc).local().format('hh:mm A')} />
+                                tickFormatter={(unix) => dayjs.unix(unix).local().format('hh:mm A')} 
+                                type="number"
+                                domain={[dayjs().subtract(committedSliderValue[0] * -1, 'hours').unix(), dayjs().subtract(committedSliderValue[1] * -1, 'hours').unix()]}
+                                />
+                                
                             <YAxis />
                             <Tooltip labelFormatter={(label) => {
-                                return dayjs.utc(label).local().format('hh:mm:ss A');
+                                return dayjs.unix(label).local().format('hh:mm:ss A');
                             }} />
                             <Legend />
 
