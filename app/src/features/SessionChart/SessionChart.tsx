@@ -1,6 +1,6 @@
 import type { DisplaySession } from "@serverTypes/session";
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { getPastDaySessions } from "../../services/api";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -75,7 +75,7 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                 <>
                     <TitleGrid>
                         <TitleGridLeft>
-                            <Typography variant="h5" >{`Activity between ${dayjs().subtract(committedSliderValue[0] * -1, 'hours').format('hh.mm A')} and ${dayjs().subtract(committedSliderValue[1] * -1, 'hours').format('hh.mm A')} on ${hostMachine}`}</Typography>
+                            <Typography variant="h5" >{`Activity between ${dayjs().subtract(committedSliderValue[0] * -1, 'hours').format('hh:mm A')} and ${dayjs().subtract(committedSliderValue[1] * -1, 'hours').format('hh:mm A')} on ${hostMachine}`}</Typography>
 
                         </TitleGridLeft>
                         <TitleGridRight>
@@ -97,7 +97,7 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                     </TitleGrid>
 
                     <ResponsiveContainer height={'85%'}>
-                        <LineChart data={session.applicationTimeAndEndDate}>
+                        <BarChart data={session.applicationTimeAndEndDate} barCategoryGap={0} barGap={0}>
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis
                                 dataKey='endCollectionDate'
@@ -113,11 +113,11 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                             <Legend />
 
                             {session.applicationNames.map((application) => {
-                                return (<Line key={application} type="basis" dataKey={application} stroke={lineColors && lineColors[application]} />);
+                                return (<Bar key={application} type="basis" stackId='a' dataKey={application} fill={lineColors && lineColors[application]} />);
                             }
                             )}
-                            <Line name={'Total Time'} type="basis" dataKey={'totalTime'} stroke={'black'} />
-                        </LineChart>
+                            {/* <Bar name={'Total Time'} type="basis" stackId='a' dataKey={'totalTime'} fill={'black'} /> */}
+                        </BarChart>
                     </ResponsiveContainer>
                 </>
             )}
