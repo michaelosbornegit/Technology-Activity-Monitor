@@ -1,6 +1,6 @@
 import type { DisplaySession } from "@serverTypes/session";
 import React, { SyntheticEvent, useEffect, useState } from "react";
-import { Bar, BarChart, CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { getPastDaySessions } from "../../services/api";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
