@@ -40,8 +40,8 @@ const StyledSlider = styled(Slider)({
 
 const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.Element => {
     const [session, setSession] = useState<DisplaySession>();
-    const [sliderValue, setSliderValue] = useState<number[]>([-12, 0]);
-    const [committedSliderValue, setCommittedSliderValue] = useState<number[]>([-12, 0]);
+    const [sliderValue, setSliderValue] = useState<number[]>([-6, 0]);
+    const [committedSliderValue, setCommittedSliderValue] = useState<number[]>([-6, 0]);
     const [lineColors, setLineColors] = useState<{ [id: string]: string }>({})
 
     useEffect(() => {
