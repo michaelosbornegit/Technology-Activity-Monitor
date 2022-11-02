@@ -113,10 +113,10 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                             <Legend />
 
                             {session.applicationNames.map((application) => {
-                                return (<Line key={application} type="monotone" dataKey={application} stroke={lineColors && lineColors[application]} />);
+                                return (<Line key={application} type="basis" dataKey={application} stroke={lineColors && lineColors[application]} />);
                             }
                             )}
-                            <Line name={'Total Time'} type="monotone" dataKey={'totalTime'} stroke={'black'} />
+                            <Line name={'Total Time'} type="basis" dataKey={'totalTime'} stroke={'black'} />
                         </LineChart>
                     </ResponsiveContainer>
                 </>
