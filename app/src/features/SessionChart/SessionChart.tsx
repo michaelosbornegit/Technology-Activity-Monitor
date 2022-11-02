@@ -45,11 +45,13 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
     const [lineColors, setLineColors] = useState<{ [id: string]: string }>({})
 
     useEffect(() => {
-        getPastDaySessions(hostMachine, committedSliderValue[0] * -1, committedSliderValue[1] * -1).then((session) => {
-            setSession(session);
-            console.log(session);
-        });
-    }, [committedSliderValue, hostMachine]);
+        if (!session) {
+            getPastDaySessions(hostMachine, committedSliderValue[0] * -1, committedSliderValue[1] * -1).then((session) => {
+                setSession(session);
+                console.log(session);
+            });
+        }
+    }, [committedSliderValue, hostMachine, session]);
 
     useEffect(() => {
         if (session) {
