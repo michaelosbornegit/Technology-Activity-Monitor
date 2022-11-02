@@ -7,6 +7,9 @@
     "start": "stmux -- [ [ \"npm run start:server\" .. -s 1/3 \"npm run start:app\" ] ]",
     "start:server": "cd ../server && npm run start:dev",
     "start:app": "cd ../app && npm start",
+    "build": "stmux -- [ [ \"npm run build:server\" .. -s 1/3 \"npm run build:app\" ] ]",
+    "build:server": "cd ../server && npm run build",
+    "build:app": "cd ../app && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

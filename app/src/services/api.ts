@@ -1,6 +1,5 @@
 import { HostMachines } from '@serverTypes/enums';
 import { DisplaySession } from '@serverTypes/session';
-import { start } from 'repl';
 
 const sessionResource = `${process.env.REACT_APP_API_HOST}/session` || '';
 

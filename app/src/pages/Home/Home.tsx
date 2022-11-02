@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { Paper, Typography } from "@mui/material"
+import { Paper } from "@mui/material"
 import React from "react";
 import PastDaySessions from "../../features/SessionChart/SessionChart";
 

@@ -47,15 +47,18 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
     useEffect(() => {
         getPastDaySessions(hostMachine, committedSliderValue[0] * -1, committedSliderValue[1] * -1).then((session) => {
             setSession(session);
+        });
+    }, [committedSliderValue, hostMachine]);
+
+    useEffect(() => {
+        if (session) {
             const tempLineColors: { [id: string]: string } = {};
             session.applicationNames.forEach((name) => {
-                if (!(name in lineColors)) {
-                    tempLineColors[name] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-                }
-            })
-            setLineColors({ ...lineColors, ...tempLineColors });
-        });
-    }, [committedSliderValue]);
+                tempLineColors[name] = `#${Math.floor(Math.random() * 16777215).toString(16)}`;
+            });
+            setLineColors(tempLineColors);
+        }
+    }, [session])
 
     const handleChangeCommitted = (event: Event | SyntheticEvent<Element, Event>, newValue: number | number[]) => {
         setCommittedSliderValue(newValue as number[]);
@@ -76,17 +79,17 @@ const PastDaySessions = ({ hostMachine }: { hostMachine: HostMachines }): JSX.El
                         </TitleGridLeft>
                         <TitleGridRight>
                             <TitleGridRightContent>
-                        <Typography gutterBottom>
-                                Time Adjustment
-                            </Typography>
-                            <StyledSlider
-                                value={sliderValue}
-                                onChange={handleChange}
-                                onChangeCommitted={handleChangeCommitted}
-                                valueLabelDisplay="auto"
-                                min={-24}
-                                max={0}
-                            />
+                                <Typography gutterBottom>
+                                    Time Adjustment
+                                </Typography>
+                                <StyledSlider
+                                    value={sliderValue}
+                                    onChange={handleChange}
+                                    onChangeCommitted={handleChangeCommitted}
+                                    valueLabelDisplay="auto"
+                                    min={-24}
+                                    max={0}
+                                />
                             </TitleGridRightContent>
                         </TitleGridRight>
 
