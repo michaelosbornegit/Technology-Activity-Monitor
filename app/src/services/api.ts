@@ -1,4 +1,6 @@
+import { HostMachines } from '@serverTypes/enums';
 import { DisplaySession } from '@serverTypes/session';
+import { start } from 'repl';
 
 const sessionResource = `${process.env.REACT_APP_API_HOST}/session` || '';
 
@@ -17,6 +19,11 @@ const enrichedFetch = async (
     return response.json();
 }
 
-export const getPastDaySessions = (): Promise<DisplaySession> => {
-    return enrichedFetch(`${sessionResource}/lastDay`);
+export const getPastDaySessions = (hostMachine: HostMachines, startTime: number, endTime: number): Promise<DisplaySession> => {
+
+    return enrichedFetch(`${sessionResource}/lastDay?` + new URLSearchParams({
+        hostMachine: hostMachine,
+        startTime: startTime.toString(),
+        endTime: endTime.toString()
+      }));
 }

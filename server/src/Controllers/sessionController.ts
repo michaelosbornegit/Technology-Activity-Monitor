@@ -13,6 +13,7 @@ import {
   import type { ChromeSessionBody, DisplaySession, Session, SessionBody } from "../Types/session";
   import { SessionService } from "../Services/session";
 import bodyParser from "body-parser";
+import { HostMachines } from "../Types/enums";
   
   @Route("session")
   @Middlewares(bodyParser.urlencoded({ extended: true }), bodyParser.json())
@@ -23,15 +24,13 @@ import bodyParser from "body-parser";
     }
 
     @Get("/lastDay")
-    public async getPastDay(): Promise<DisplaySession> {
-      return await new SessionService().getPastDaySessions();
+    public async getPastDay(@Query() hostMachine: HostMachines, @Query() startTime: number, @Query() endTime: number): Promise<DisplaySession> {
+      return await new SessionService().getPastDaySessions(hostMachine, startTime, endTime);
     }
 
     @Post("/desktop")
     @SuccessResponse('201', 'Session Created')
     public async postSessions(@Body() body: SessionBody) {
-      console.log(body);
-      
       await new SessionService().create(body.sessions);
     }
 

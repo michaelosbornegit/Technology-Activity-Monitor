@@ -97,6 +97,13 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
                 r = requests.post(f'{apiHost}/session/desktop', json={'sessions': sessions})
             except requests.exceptions.RequestException as e:
                 print(e)
+            # If there is a second api host specified, upload there too for local testing
+            apiHost2 = os.getenv('API_HOST2')
+            if apiHost2:
+                try:
+                    r = requests.post(f'{apiHost2}/session/desktop', json={'sessions': sessions})
+                except requests.exceptions.RequestException as e:
+                    print(e)
             startDate = datetime.datetime.utcnow().isoformat()
             activeWindows.clear()
             counter = 0

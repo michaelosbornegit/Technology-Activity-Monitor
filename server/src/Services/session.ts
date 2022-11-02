@@ -1,5 +1,6 @@
 import { insertChromeSession } from "../Models/chrome-session.model";
 import { allSessions, insertSessions, pastDaySessions } from "../Models/session.model";
+import { HostMachines } from "../Types/enums";
 import type { DisplaySession, CreateChromeSession, Session, CreateSession } from "../Types/session";
 
 export class SessionService {
@@ -7,8 +8,9 @@ export class SessionService {
         return await allSessions();
     }
 
-    public async getPastDaySessions(): Promise<DisplaySession> {
-        return await pastDaySessions();
+    public async getPastDaySessions(hostMachine: HostMachines, startTime: number, endTime: number): Promise<DisplaySession> {
+        // TODO if end time is longer than 24 hours throw exception
+        return await pastDaySessions(hostMachine, startTime, endTime);
     }
     
     public async create(sessions: CreateSession[]): Promise<void> {

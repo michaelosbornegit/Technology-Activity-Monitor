@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
-import { application } from "express";
-import { Knex } from "knex";
+import { HostMachines } from "../Types/enums";
 import type { CreateSession, DisplaySession, Session } from "../Types/session";
 import pg from "./common";
 dayjs.extend(utc)
@@ -9,8 +8,6 @@ dayjs.extend(utc)
 const SESSION_TABLE = "sessions";
 
 export const insertSessions = async (sessions: CreateSession[]) => {
-  console.log(sessions);
-
   await pg<Session>("sessions").insert(sessions);
 };
 
@@ -19,8 +16,8 @@ export const allSessions = async () => {
   return results;
 };
 
-export const pastDaySessions = async () => {
-  const results = await pg<Session>(SESSION_TABLE).select().where('endCollectionDate', '>=', dayjs.utc().subtract(12, 'hours').toISOString()).where('endCollectionDate', '<', dayjs.utc().toISOString()).orderBy('endCollectionDate', 'asc');
+export const pastDaySessions = async (hostMachine: HostMachines, startTime: number, endTime: number) => {
+  const results = await pg<Session>(SESSION_TABLE).select().where({ hostMachine }).where('endCollectionDate', '>=', dayjs.utc().subtract(startTime, 'hours').toISOString()).where('endCollectionDate', '<', dayjs.utc().subtract(endTime, 'hours').toISOString()).orderBy('endCollectionDate', 'asc');
 
   const displaySession: DisplaySession = {
     applicationNames: [],
@@ -34,20 +31,23 @@ export const pastDaySessions = async () => {
     }
     
     const currentEndDate = dayjs.utc(results[i].endCollectionDate).toISOString();
-    const newDisplaySession: { [id: string]: string | number } = {};
+    const usageInfo: { [id: string]: string | number } = {};
+    usageInfo['endCollectionDate'] = dayjs.utc(results[i].endCollectionDate).toISOString();
 
-    newDisplaySession['endCollectionDate'] = results[i].endCollectionDate;
-    newDisplaySession[results[i].application] = results[i].openTimeSeconds;
-    
+    let totalTime = 0;
+    usageInfo[results[i].application] = results[i].openTimeSeconds;
+    totalTime += results[i].openTimeSeconds;
     while (i < results.length - 1 && currentEndDate == dayjs.utc(results[i + 1].endCollectionDate).toISOString()) {
       i++;
       if (displaySession.applicationNames.findIndex((session) => session === results[i].application) === -1) {
         displaySession.applicationNames.push(results[i].application);
       }
-      newDisplaySession[results[i].application] = results[i].openTimeSeconds;
+      usageInfo[results[i].application] = results[i].openTimeSeconds;
+      totalTime += results[i].openTimeSeconds;
     }
 
-    displaySession.applicationTimeAndEndDate.push(newDisplaySession);
+    usageInfo['totalTime'] = totalTime;
+    displaySession.applicationTimeAndEndDate.push(usageInfo);
   }
 
   return displaySession;
