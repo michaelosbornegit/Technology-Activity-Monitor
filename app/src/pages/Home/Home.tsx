@@ -14,10 +14,13 @@ const Home = (): JSX.Element => {
     <>
       <Paper sx={{ padding: '50px' }}>
         <SessionChartBlock>
+          <PastDaySessions hostMachine={'ANDROID'} />
+        </SessionChartBlock>
+        <SessionChartBlock>
           <PastDaySessions hostMachine={'MAC'} />
         </SessionChartBlock>
         <SessionChartBlock>
-          <PastDaySessions hostMachine={'ANDROID'} />
+          <PastDaySessions hostMachine={'WINDOWS'} />
         </SessionChartBlock>
       </Paper>
     </>
