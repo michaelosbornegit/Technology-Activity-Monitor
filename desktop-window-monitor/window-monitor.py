@@ -8,17 +8,22 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+hostMachine = "Unsupported"
+
 if sys.platform == "darwin":
+    hostMachine = "MAC"
     from AppKit import NSWorkspace
     from Quartz import (
         CGWindowListCopyWindowInfo,
         kCGWindowListOptionOnScreenOnly,
         kCGNullWindowID
     )
+elif sys.platform == "win32":
+    hostMachine = "WINDOWS"
+    import win32gui
 
 global pressed
 pressed = False
-
 
 def on_press(key):
     global pressed
@@ -46,19 +51,14 @@ def getActiveWindowInfo():
                 return x['kCGWindowOwnerName']
             else:
                 x = None
-    # print(openWindow['kCGWindowOwnerName'])
-    # for window in windowList:
-    #     # print(window)
-    #     pid = window['kCGWindowOwnerPID']
-    #     windowNumber = window['kCGWindowNumber']
-    #     ownerName = window['kCGWindowOwnerName']
-    #     geometry = window['kCGWindowBounds']
-    #     windowTitle = window.get('kCGWindowName', u'Unknown')
-    #     if curr_pid == pid:
-    #         print(window['kCGWindowOwnerName'])
-    #         # print("%s - %s (PID: %d, WID: %d): %s" % (ownerName, windowTitle.encode('ascii','ignore'), pid, windowNumber, geometry))
     elif sys.platform == "win32":
-        (active_app_name, windowTitle) = _getActiveInfo_Win32()
+        # https://stackoverflow.com/a/608814/562769
+        
+        window = win32gui.GetForegroundWindow()
+        windowName = win32gui.GetWindowText(window).split(' - ').pop().strip()
+        if (windowName == ''):
+            windowName = 'System'
+        return windowName
 
 
 counter = 0
@@ -83,7 +83,7 @@ with pynput.keyboard.Listener(on_press=on_press) as keyboardListener, pynput.mou
             for window in activeWindows:
                 if activeWindows[window] and window:
                     sessions.append({
-                        'hostMachine': 'MAC',
+                        'hostMachine': hostMachine,
                         'application': window,
                         'startCollectionDate': startDate,
                         'endCollectionDate': endCollectionDate, 
