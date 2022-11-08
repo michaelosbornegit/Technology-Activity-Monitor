@@ -64,18 +64,19 @@ class CurrentApplicationMonitorService : AccessibilityService() {
                     } else {
                         // If any app other than system ui is open, screen must be unlocked
                         recordingPaused = false
+                        awayCounter = 0
                     }
 
-                    activeApplications[currentApplicationName] =
-                        activeApplications.getOrDefault(currentApplicationName, 0) + sleepTimer
+                    if (!screenLocked) {
+                        activeApplications[currentApplicationName] =
+                            activeApplications.getOrDefault(currentApplicationName, 0) + sleepTimer
+                    }
                     if (counter >= notificationInterval) {
                         postSessionActivity(activeApplications, startDate)
                         startDate = Instant.now().toString()
                         activeApplications.clear()
                         counter = 0
                     }
-                } else {
-                    awayCounter = 0
                 }
                 Thread.sleep((sleepTimer * 1000).toLong())
             }
