@@ -16,25 +16,16 @@ import org.json.JSONObject
 import java.nio.charset.Charset
 import java.time.Instant
 import kotlin.concurrent.thread
+import kotlin.math.log
 
 
 class CurrentApplicationMonitorService : AccessibilityService() {
-
-//    override fun onServiceConnected() {
-//        super.onServiceConnected()
-//
-//        //Configure these here for compatibility with API 13 and below.
-//        val config = AccessibilityServiceInfo()
-//        config.eventTypes = AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED
-//        config.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC
-//        if (Build.VERSION.SDK_INT >= 16) //Just in case this helps
-//            config.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS
-//        serviceInfo = config
-//    }
     val notificationInterval = 120
     val sleepTimer = 1
     var currentApplicationName = ""
     var screenLocked = false
+    var recordingPaused = false
+
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -52,40 +43,41 @@ class CurrentApplicationMonitorService : AccessibilityService() {
         val activeApplications = LinkedHashMap<String, Int>()
         var startDate = Instant.now().toString()
         thread {
-            while(true) {
-                if (screenLocked == false || currentApplicationName != "System UI") {
+            while (true) {
+                if (recordingPaused == false) {
 //                    Log.d("CURRENTACTIVITY", currentApplicationName)
 //                    Log.d("CURRENTACTIVITY", counter.toString())
 //                    Log.d("CURRENTACTIVITY", awayCounter.toString())
 //                    Log.d("CURRENTACTIVITY", activeApplications.toString())
                     counter++
-                    if (currentApplicationName == "System UI") {
+                    if (screenLocked) {
                         awayCounter++
-                        // System UI was open for longer than a notification cycle
-                        // Wait for another app to be switched to (the phone unlocked)
-                        if (awayCounter >= notificationInterval) {
+                        // Ensure activity before the lock screen was pressed is recorded
+                        // by waiting longer than the notification interval
+                        if (awayCounter > notificationInterval) {
                             counter = 0
                             awayCounter = 0
                             activeApplications.clear()
-                            screenLocked = true
+                            recordingPaused = true
+                            continue
                         }
                     } else {
                         // If any app other than system ui is open, screen must be unlocked
-                        screenLocked = false
-                        awayCounter = 0
+                        recordingPaused = false
                     }
 
-                    if (currentApplicationName != "System UI") {
-                        activeApplications[currentApplicationName] = activeApplications.getOrDefault(currentApplicationName, 0) + sleepTimer;
-                    }
+                    activeApplications[currentApplicationName] =
+                        activeApplications.getOrDefault(currentApplicationName, 0) + sleepTimer
                     if (counter >= notificationInterval) {
                         postSessionActivity(activeApplications, startDate)
                         startDate = Instant.now().toString()
                         activeApplications.clear()
                         counter = 0
                     }
+                } else {
+                    awayCounter = 0
                 }
-                Thread.sleep((sleepTimer * 1000).toLong());
+                Thread.sleep((sleepTimer * 1000).toLong())
             }
         }
     }
@@ -94,16 +86,30 @@ class CurrentApplicationMonitorService : AccessibilityService() {
         if (accessibilityEvent.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             val packageManager = applicationContext.packageManager
             val applicationInfo: ApplicationInfo? = try {
-                packageManager.getApplicationInfo(accessibilityEvent.packageName.toString(), PackageManager.GET_META_DATA)
+                packageManager.getApplicationInfo(
+                    accessibilityEvent.packageName.toString(),
+                    PackageManager.GET_META_DATA
+                )
             } catch (e: PackageManager.NameNotFoundException) {
                 null
             }
             val applicationName =
                 (if (applicationInfo != null) packageManager.getApplicationLabel(applicationInfo) else "(unknown)") as String
 
-            if (applicationName != "Gboard" && applicationName != "") {
-//                Log.i("CurrentActivity", applicationName)
-//                Log.i("CurrentActivity", "$accessibilityEvent")
+            if ((accessibilityEvent.contentDescription != null
+                        && accessibilityEvent.contentDescription.toString() == "Fingerprint sensor")
+                || accessibilityEvent.text.toString().startsWith("[Lock screen.")
+            ) {
+                screenLocked = true
+            } else {
+                screenLocked = false
+                recordingPaused = false
+            }
+
+
+            if (applicationName != "Gboard" && applicationName != "" && applicationName != "System UI") {
+//                Log.d("CURRENTACTIVITY", applicationName)
+//                Log.d("CurrentActivity", "$accessibilityEvent")
                 currentApplicationName = applicationName
             }
 
@@ -111,11 +117,12 @@ class CurrentApplicationMonitorService : AccessibilityService() {
     }
 
     private fun postSessionActivity(activityMap: LinkedHashMap<String, Int>, startDate: String) {
+        // TODO add failure recovery
         val endDate = Instant.now().toString()
-        var sessions = JSONArray();
+        var sessions = JSONArray()
 
         for (app in activityMap.keys) {
-            val jsonBody = JSONObject();
+            val jsonBody = JSONObject()
             jsonBody.put("hostMachine", "ANDROID")
             jsonBody.put("application", app)
             jsonBody.put("startCollectionDate", startDate)
@@ -124,7 +131,7 @@ class CurrentApplicationMonitorService : AccessibilityService() {
             sessions.put(jsonBody)
         }
 
-        val finalJsonBody = JSONObject().put("sessions", sessions);
+        val finalJsonBody = JSONObject().put("sessions", sessions)
 
         Log.d("CURRENTACTIVITY", finalJsonBody.toString())
 
@@ -132,7 +139,7 @@ class CurrentApplicationMonitorService : AccessibilityService() {
         val queue = Volley.newRequestQueue(this)
         val url = "https://tam-server.michaelosborne.dev/session/desktop"
 
-        val jsonRequest : JsonObjectRequest =
+        val jsonRequest: JsonObjectRequest =
             object : JsonObjectRequest(
                 Method.POST, url, finalJsonBody,
                 Response.Listener { response ->
@@ -143,7 +150,7 @@ class CurrentApplicationMonitorService : AccessibilityService() {
                 Response.ErrorListener { error ->
                     Log.d("API", "error => $error")
                 }
-            ){
+            ) {
                 override fun getBody(): ByteArray {
                     return requestBody.toByteArray(Charset.defaultCharset())
                 }
