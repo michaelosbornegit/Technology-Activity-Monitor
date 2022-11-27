@@ -20,7 +20,8 @@ if sys.platform == "darwin":
     )
 elif sys.platform == "win32":
     hostMachine = "WINDOWS"
-    import win32gui
+    import psutil
+    import win32process, win32gui
 
 global pressed
 pressed = False
@@ -52,13 +53,18 @@ def getActiveWindowInfo():
             else:
                 x = None
     elif sys.platform == "win32":
-        # https://stackoverflow.com/a/608814/562769
-        
         window = win32gui.GetForegroundWindow()
-        windowName = win32gui.GetWindowText(window).split(' - ').pop().strip()
-        if (windowName == ''):
-            windowName = 'System'
-        return windowName
+        _,pid = win32process.GetWindowThreadProcessId(window)
+        process = psutil.Process(pid)
+        process_name = process.name().removesuffix(".exe")
+        process_name = process_name[0].upper() + process_name[1:]
+        # Code for more specific window titles, keep in case I want more detailed info
+        # windowName = win32gui.GetWindowText(window)
+        # print(windowName)
+        # windowName = win32gui.GetWindowText(window).split(' - ').pop().strip()
+        # if (windowName == ''):
+        #     windowName = 'System'
+        return process_name
 
 
 counter = 0
