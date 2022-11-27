@@ -44,6 +44,7 @@ class CurrentApplicationMonitorService : AccessibilityService() {
         var startDate = Instant.now().toString()
         thread {
             while (true) {
+                try {
                 if (recordingPaused == false) {
 //                    Log.d("CURRENTACTIVITY", currentApplicationName)
 //                    Log.d("CURRENTACTIVITY", counter.toString())
@@ -78,6 +79,9 @@ class CurrentApplicationMonitorService : AccessibilityService() {
                         counter = 0
                     }
                 }
+                    } catch (e: Exception) {
+                                        Log.e("CURRENTACTIVITY", e.toString())
+                    }
                 Thread.sleep((sleepTimer * 1000).toLong())
             }
         }

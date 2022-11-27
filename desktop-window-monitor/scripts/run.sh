@@ -3,5 +3,5 @@
 cd ../
 python3 -m venv env
 source ./env/bin/activate
-python ./mac-window-monitor.py
+python ./window-monitor.py
 deactivate
